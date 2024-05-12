@@ -6,6 +6,7 @@ from youtube_transcript_api import YouTubeTranscriptApi
 import moviepy.editor as mp
 import speech_recognition as sr
 from dotenv import load_dotenv
+import google.generativeai as genai
 
 
 app = Flask(__name__)
@@ -13,6 +14,41 @@ app = Flask(__name__)
 load_dotenv()
 
 print(os.getenv('SECRET_KEY'))
+
+api_key = os.getenv('SECRET_KEY')
+print(api_key)
+genai.configure(api_key=api_key)
+# Set up the model
+generation_config = {
+"temperature": 1,
+"top_p": 0.95,
+"top_k": 0,
+"max_output_tokens": 8192,
+}
+safety_settings = [
+{
+    "category": "HARM_CATEGORY_HARASSMENT",
+    "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+},
+{
+    "category": "HARM_CATEGORY_HATE_SPEECH",
+    "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+},
+{
+    "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+    "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+},
+{
+    "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+    "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+},
+]
+system_instruction = "Você é uma ux research que analisa entrevistas com usuários para entender suas necessidades, dificuldades, dúvidas e hábitos. Ao receber uma transcrição de uma entrevista você deve categorizar e resumir os temas que foram falados e dizer em qual minuto esse assunto foi falado."
+model = genai.GenerativeModel(model_name="gemini-1.5-pro-latest",
+                            generation_config=generation_config,
+                            system_instruction=system_instruction,
+                            safety_settings=safety_settings)
+chat = model.start_chat(history=[])
 
 def localVideoTranscrpit(path):
 
@@ -49,49 +85,9 @@ def extract_transcript_details(youtube_video_url):
       raise e
   
 
-import google.generativeai as genai
+
 
 def analise(type, message):
-
-    api_key = os.getenv('SECRET_KEY')
-    print(api_key)
-    genai.configure(api_key=api_key)
-
-
-
-    # Set up the model
-    generation_config = {
-    "temperature": 1,
-    "top_p": 0.95,
-    "top_k": 0,
-    "max_output_tokens": 8192,
-    }
-
-    safety_settings = [
-    {
-        "category": "HARM_CATEGORY_HARASSMENT",
-        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
-    },
-    {
-        "category": "HARM_CATEGORY_HATE_SPEECH",
-        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
-    },
-    {
-        "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
-    },
-    {
-        "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
-        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
-    },
-    ]
-    system_instruction = "Você é uma ux research que analisa entrevistas com usuários para entender suas necessidades, dificuldades, dúvidas e hábitos. Ao receber uma transcrição de uma entrevista você deve categorizar e resumir os temas que foram falados e dizer em qual minuto esse assunto foi falado."
-
-    model = genai.GenerativeModel(model_name="gemini-1.5-pro-latest",
-                                generation_config=generation_config,
-                                system_instruction=system_instruction,
-                                safety_settings=safety_settings)
-    chat = model.start_chat(history=[])
 
     if type == 'URL':
         transcrpit = extract_transcript_details(message)
@@ -99,7 +95,7 @@ def analise(type, message):
         transcrpit = localVideoTranscrpit(message)
     if type == 'TALK':
         transcrpit = message
-        
+
     response = chat.send_message(transcrpit)
     print(response.text)
     return response.text

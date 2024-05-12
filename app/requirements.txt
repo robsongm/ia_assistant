@@ -1,1 +1,7 @@
 Flask==2.2.5
+google-generativeai
+google-cloud-speech
+youtube_transcript_api
+streamlit
+SpeechRecognition
+moviepy
