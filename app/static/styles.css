@@ -1,0 +1,243 @@
+:root {
+  --side-margin: 4px;
+  --top-bottom-padding: 4px;
+  --inner-roundness: 5.5px;
+}
+
+html {
+  scrollbar-color: hsla(0, 0%, 60%, 0.2) transparent;
+}
+
+::-webkit-scrollbar {
+  background-color: transparent;
+  width: 8px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: hsla(0, 0%, 60%, 0.15);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: hsla(0, 0%, 60%, 0.25);
+}
+
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;
+  min-height: 200px;
+  max-width: 900px;
+  width: 80%;
+  padding: 20px;
+  border-radius: 10px;
+
+  backdrop-filter: blur(1px);
+  border: none;
+}
+
+.chat-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.chat-box {
+  flex-grow: 1;
+  width: 100%;
+  min-height: 100px;
+  margin-bottom: 20px;
+  overflow-y: auto;
+}
+
+
+.heading {
+  text-align: left;
+  margin-left: 5px;
+  margin-top: 0px;
+  margin-bottom: 20px;
+  background-clip: text;
+  background: hsl(0, 0%, 0%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.button {
+  background-color: hsl(0, 0%, 0%);
+  color: hsl(0, 0%, 100%);
+  
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  margin-left: 10px;
+  margin-right: 5px;
+  cursor: pointer;
+  transition: background-color 0.16s ease-in;
+}
+
+.button:hover {
+  background-color: hsl(0, 0%, 27%);
+}
+
+.message {
+  display: inline-block;
+  max-width: 70%;
+  margin: 5px;
+  padding: 10px;
+  border-radius: 8px;
+  overflow-wrap: break-word;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+.message li {
+  white-space: normal;
+}
+
+.message code {
+  border-radius: 8px;
+}
+
+.user-message {
+  background-color: hsl(0, 0%, 0%);
+  color: hsl(0, 0%, 100%);
+  border-radius: 15px;
+  float: right;
+  clear: both;
+  font-size: 24px;
+}
+
+.assistant-message {
+  background-color: hsla(0, 0%, 100%, 0);
+  color: hsl(0, 0%, 0%);
+  float: left;
+  clear: both;
+  font-size: 24px;
+}
+
+.message * {
+  margin: 0px;
+}
+
+.input-form {
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+/* Menubar styles */
+.menubar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  height: 42px;
+  max-width: 90%;
+  inset: 0 0 auto 0;
+  margin: 10px auto auto auto;
+  padding: var(--top-bottom-padding) var(--side-margin);
+  background-color: hsla(235, 20%, 15%, 0.9);
+  backdrop-filter: blur(1px);
+  border-radius: 8px;
+  z-index: 1000;
+}
+
+.input {
+  flex-grow: 1;
+  height: 60px;
+  min-width: 70px;
+  border-radius: var(--inner-roundness);
+  background-color: #F5F5F5;
+  color: #727272;
+  padding-left: 7px;
+  font-size: 24px;
+  border: none;
+  align-content: center;
+  text-indent: 16px;
+}
+
+.input:focus {
+  outline: none;
+}
+
+.input,
+.slider-container {
+  margin-left: var(--side-margin);
+  margin-right: var(--side-margin);
+}
+
+.slider-container {
+  position: relative;
+  width: 130px;
+  height: 2em;
+  cursor: pointer;
+  background-color: hsl(240, 10%, 15%);
+  border:none;
+  transition: 0.4s;
+}
+
+
+.slider-container input {
+  /* display: none; */
+  opacity: 0;
+  position: fixed;
+}
+
+.slider-track {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.slider {
+  position: absolute;
+  left: 0;
+  height: 2em;
+  width: 50%;
+  border-radius: var(--inner-roundness);
+  background-color: hsl(240, 20%, 20%);
+  transition: 0.4s;
+}
+
+input:checked + .slider-track .slider {
+  left: 50%;
+}
+
+.model-label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  color: hsl(240, 76%, 87%);
+  font-size: 15px;
+  z-index: 1;
+}
+
+#userAvatar{
+    margin-bottom:-156px; /* 156px is half of #userAvatar's height */
+    margin-left:calc(380px - 156px); /* half of .accountStats's width - half of #userAvatar's height */
+    border-radius: 50%;
+    height: 312px;
+    width: 312px;
+    object-fit: cover;
+    object-position: center;
+}
+.accountStats {
+    text-align:center; /* additional */
+    padding-top:156px; /* half of #userAvatar's height */
+    width: 760px;
+    height:980px;
+    background: #E0E0E0;
+    box-shadow: 9px 9px 10px rgba(0, 0, 0, 0.25);
+    border-radius: 18px;
+}
+.account-container {
+    top: 30%;
+    transform:translate(0, 30%);
+}
