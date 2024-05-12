@@ -9,6 +9,7 @@ let messages = [];
 let systemMessageRef = null;
 let autoScrollState = true;
 
+
 // Event listener functions
 function handleModelToggle() {
   if (modelToggle.checked) {
@@ -62,10 +63,17 @@ function addMessageToDiv(role, content = "") {
   let messageDiv = document.createElement("div");
   messageDiv.className =
     role === "user" ? "message user-message" : "message assistant-message";
-
+  
   let messageText = document.createElement("p");
-  messageDiv.appendChild(messageText);
-
+  if (content == "UPLOAD_VIDEO") {
+    messageText = document.createElement("div");
+    messageDiv.appendChild(messageText);
+  }
+  else {
+    messageText = document.createElement("p");
+    messageDiv.appendChild(messageText);
+  }
+  
   if (content) {
     let renderedContent = window.renderMarkdown(content).trim();
     messageText.innerHTML = renderedContent;

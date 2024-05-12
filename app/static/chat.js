@@ -10,6 +10,7 @@ function updateSystemMessage(systemMessage) {
     }
     systemMessageRef = { role: "system", content: systemMessage };
     messages.push(systemMessageRef);
+    
   }
 }
 
@@ -42,8 +43,17 @@ async function handleResponse(response, messageText) {
     }
 
     const text = decoder.decode(value);
-    assistantMessage += text;
-    messageText.innerHTML = window.renderMarkdown(assistantMessage).trim();
+    if (text == 'UPLOAD_FILE') {
+      messageText = addMessageToDiv("assistant");
+      upload_html = '<form id="upload"> <div class="form-group"> <label for="exampleFormControlFile1">Example file input</label> <input type="file" class="form-control-file" id="exampleFormControlFile1"> </div> </form>'
+      messageText.innerHTML = upload_html.trim();
+  
+    }
+    else {
+      assistantMessage += text;
+      messageText.innerHTML = window.renderMarkdown(assistantMessage).trim();
+    }
+    
     highlightCode(messageText);
     autoScroll();
   }
@@ -61,6 +71,7 @@ window.onload = function () {
     messages.push({ role: "user", content: userInput });
     addMessageToDiv("user", userInput);
     userInputElem.value = "";
+    
 
     let messageText = addMessageToDiv("assistant");
 
@@ -68,4 +79,23 @@ window.onload = function () {
 
     handleResponse(response, messageText);
   });
+
+  
+    
+  first()
 };
+
+async function first(){
+  let userInput = userInputElem.value.trim();
+
+    messages.push({ role: "assistant", content: "Vamos lá? Digite o formato da entrevista que você gostaria de analisar: URL do Youtube ou Texto transcrito", type: '1'});
+    addMessageToDiv("assistant", "Vamos lá? Digite o formato da entrevista que você gostaria de analisar: URL do Youtube ou Texto transcrito");
+    userInputElem.value = "";
+
+    let messageText = addMessageToDiv("assistant");
+
+    const response = await postRequest();
+
+    handleResponse(response, messageText)
+}
+
